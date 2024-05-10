@@ -79,8 +79,7 @@ const SignIn: React.FC = () => {
               <Image imageLink={Four2}  altImage="Four" />
             </div>
             <Title
-              title="Four Work"
-            />
+              title="Four Work" subtitle={''}            />
 
             <div className="input-box">
               <label htmlFor="email">Email<i>*</i></label>
