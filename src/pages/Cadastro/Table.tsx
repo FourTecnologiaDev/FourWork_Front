@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
 import TicketTable from '../Table/Table';
+import { SubmitHandler, FieldValues  } from 'react-hook-form';
 
-export default function Cadastro({ loggedInEmail }) {
+export default function Cadastro({ }) {
   const { register, handleSubmit, watch } = useForm();
-  const [formData, setFormData] = useState(null);
-  const [isClienteSelected, setIsClienteSelected] = useState(false); 
+  const [formData,] = useState("");
   const tipoPessoa = watch("TipoPessoa");
   const [showAlert, setShowAlert] = useState(false)
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const headers = {
         headers: {
@@ -19,12 +19,12 @@ export default function Cadastro({ loggedInEmail }) {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       };
-
+  
       await api.post('/novoUsuario', { email: data.email, senha: data.senha }, headers);
       await api.post('/cadPessoa', data, headers); 
-
-      setShowAlert(true)
-
+  
+      setShowAlert(true);
+  
       setTimeout(() => {
         window.location.href = '/Table/Table';
       }, 2000);
@@ -33,7 +33,7 @@ export default function Cadastro({ loggedInEmail }) {
     }
   };
   
-  const handleCEPChange = (event) => {
+  const handleCEPChange = (event: { target: { value: any; }; }) => {
     let cepInput = event.target.value;
     cepInput = cepInput.replace(/\D/g, '');
     cepInput = cepInput.substring(0, 8);
@@ -43,16 +43,11 @@ export default function Cadastro({ loggedInEmail }) {
     event.target.value = cepInput;
   };
 
-  const formatCurrency = (value) => {
+  const formatCurrency = (value: number) => {
     return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
   };
 
-  const formatHours = (hours) => {
-    const formattedHours = `${hours < 10 ? '0' : ''}${Math.floor(hours)}:${Math.round((hours % 1) * 60) < 10 ? '0' : ''}${Math.round((hours % 1) * 60)}`;
-    return formattedHours;
-  };
-
-  const formatCPF = (cpf) => {
+  const formatCPF = (cpf: string) => {
     // Remove tudo que não é número
     cpf = cpf.replace(/\D/g, '');
   
@@ -67,7 +62,7 @@ export default function Cadastro({ loggedInEmail }) {
     return cpf;
   };
   
-  const formatCNPJ = (cnpj) => {
+  const formatCNPJ = (cnpj: string) => {
     // Remove tudo que não é número
     cnpj = cnpj.replace(/\D/g, '');
   
@@ -83,7 +78,7 @@ export default function Cadastro({ loggedInEmail }) {
     return cnpj;
   };
 
-  const formatTelefone = (telefone) => {
+  const formatTelefone = (telefone: string) => {
     // Remove tudo que não é número
     telefone = telefone.replace(/\D/g, '');
   
@@ -218,7 +213,7 @@ export default function Cadastro({ loggedInEmail }) {
           </div>
         )}
 
-      {formData && <TicketTable formData={formData} />}
+        <TicketTable loggedInEmail={formData} />
     </DefaultLayout>
   );
 }

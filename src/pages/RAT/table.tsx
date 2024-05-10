@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useState, useEffect } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
-import RatTable from '../RATS/table';
+
+interface FormData {
+  Ratcod: string | Blob;
+  Ratsenior: string | Blob;
+  RatcodS: string | Blob;
+  Anexo: (string | Blob)[];
+  Stats: string | Blob;
+  Data: string | Blob;
+}
+
+
 
 export default function Cadastro() {
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm();
-  const [formData, setFormData] = useState(null);
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>();
+  const [formData, setFormData] = useState<FormData | null>(null);
   const [showCodigoRAT, setShowCodigoRAT] = useState(false);
   const [ratSelecionado, setRATSelecionado] = useState('');
-  const [rats, setRats] = useState([]);
+  const [rats, setRats] = useState<any[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -31,7 +41,7 @@ export default function Cadastro() {
     fetchData();
   }, []);
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       const formData = new FormData();
       formData.append('Ratcod', data.Ratcod);
@@ -65,7 +75,7 @@ export default function Cadastro() {
     window.location.href = '/RATS/Table';
   };
 
-  const handleRATChange = (codigo) => {
+  const handleRATChange = (codigo: string) => {
     const selectedRAT = rats.find(rat => rat.RAT === codigo);
     if (selectedRAT) {
       console.log("Dados do RAT selecionado:", selectedRAT);
@@ -73,10 +83,14 @@ export default function Cadastro() {
       setValue('Ratcod', selectedRAT.RAT);
       setFormData({
         Ratcod: selectedRAT.RAT,
+        Ratsenior: '', 
+        RatcodS: '',
+        Anexo: [],
+        Stats: '',
+        Data: '',
       });
     }
   };
-
 
   return (
     <DefaultLayout>
@@ -98,10 +112,10 @@ export default function Cadastro() {
           <div className="mb-4 flex flex-row flex-wrap">
             <div className="flex w-[200px] flex-col md:pr-4">
               <div className="flex w-[200px] flex-col md:pr-4 ">
-                <label htmlFor="RAT" className="block font-semibold text-zinc-700">RATS</label>
+                <label htmlFor="Ratcod" className="block font-semibold text-zinc-700">RATS</label>
                 <select
-                  {...register('RAT')}
-                  id="RAT"
+                  {...register('Ratcod')}
+                  id="Ratcod"
                   className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none"
                   onChange={(e) => handleRATChange(e.target.value)}
                   value={ratSelecionado}
@@ -114,8 +128,8 @@ export default function Cadastro() {
               </div>
             </div>
             <div className="flex w-[300px] flex-col md:pr-4">
-              <label htmlFor="ratS" className="block font-semibold text-zinc-700">RAT Senior</label>
-              <select {...register('Ratsenior')} id="ratS" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" onChange={(e) => setShowCodigoRAT(e.target.value === 'sim')}>
+              <label htmlFor="Ratsenior" className="block font-semibold text-zinc-700">RAT Senior</label>
+              <select {...register('Ratsenior')} id="Ratsenior" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" onChange={(e) => setShowCodigoRAT(e.target.value === 'sim')}>
                 <option value="">Sim / Não</option>
                 <option value="sim">Sim</option>
                 <option value="não">Não</option>
@@ -123,25 +137,25 @@ export default function Cadastro() {
             </div>
             {showCodigoRAT && (
               <div className="flex w-[300px] flex-col md:pr-4">
-                <label htmlFor="seniorcod" className="block font-semibold text-zinc-700">Código RAT Senior</label>
-                <input placeholder="" type="number" {...register('Seniorcod')} id="seniorcod" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" />
-                {errors.seniorcod && <span className="text-red-500">Este campo é obrigatório</span>}
+                <label htmlFor="RatcodS" className="block font-semibold text-zinc-700">Código RAT Senior</label>
+                <input placeholder="" type="number" {...register('RatcodS')} id="RatcodS" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" />
+                {errors.RatcodS && <span className="text-red-500">Este campo é obrigatório</span>}
               </div>
             )}
           </div>
           <div className="mb-4 flex flex-row flex-wrap">
             <div className="flex w-[380px] flex-col md:pr-4">
-              <label htmlFor="anexo" className="block font-semibold text-zinc-700">Anexo RAT Senior</label>
-              <input type="file" {...register('Anexo')} id="anexo" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" />
+              <label htmlFor="Anexo" className="block font-semibold text-zinc-700">Anexo RAT Senior</label>
+              <input type="file" {...register('Anexo')} id="Anexo" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" />
               {errors.Anexo && <span className="text-red-500">Este campo é obrigatório</span>}
             </div>            
             <div className="flex w-[200px] flex-col md:pr-4">
-              <label htmlFor="data" className="block font-semibold text-zinc-700">Data de Lançamento</label>
+              <label htmlFor="Data" className="block font-semibold text-zinc-700">Data de Lançamento</label>
               <input type="date" {...register('Data')} id="Data" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" />
             </div>
             <div className="flex w-[300px] flex-col md:pr-4">
-              <label htmlFor="status" className="block font-semibold text-zinc-700">Status</label>
-              <select {...register('Stats')} id="stats" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none">
+              <label htmlFor="Stats" className="block font-semibold text-zinc-700">Status</label>
+              <select {...register('Stats')} id="Stats" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none">
                 <option value="">Selecione o Status</option>
                 <option value="Aberta">Aberta</option>
                 <option value="Em aprovação">Em aprovação</option>
@@ -152,7 +166,6 @@ export default function Cadastro() {
                 <option value="Pagamento Efetuado">Pagamento Efetuado</option>
               </select>
             </div>
-
           </div>
           <div className="flex justify-end">
             <button type="submit" className="mt-60 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
@@ -161,8 +174,7 @@ export default function Cadastro() {
           </div>
         </form>
       </div>
-      {formData && <RatTable formData={formData} />}
+      
     </DefaultLayout>
   );
 }
-

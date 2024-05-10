@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useState, useEffect } from 'react';
 import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
 import RatTable from '../RATS/table';
 
 export default function VisualizarRat() {
-  const { register, formState: { errors } } = useForm();
-  const [formData, setFormData] = useState(null);
-  const [showCodigoRAT, setShowCodigoRAT] = useState(false);
+  
+  const [formData] = useState({
+    codigoRAT: '',
+    Ratsenior: '',
+    codigoRATS: '',
+    Anexo: '',
+    Data: '',
+    Stats: ''
+  });
 
   useEffect(() => {
     const fetchRatData = async () => {
@@ -122,8 +127,10 @@ export default function VisualizarRat() {
             <div className="mb-4 flex flex-row flex-wrap">
               <div className="flex w-[380px] flex-col md:pr-4">
                 <label htmlFor="anexo" className="block font-semibold text-zinc-700">Anexo RAT Senior</label>
-                <a href={formData.Anexo} download="arquivo.pdf" className="block font-semibold text-blue-700">Baixar Anexo</a>
-              </div>            
+                <a href={formData.Anexo} download="arquivo.pdf" className="block font-semibold text-blue-700" onClick={pdfDowload}>
+                  Baixar Anexo
+                </a>
+              </div>       
               <div className="flex w-[200px] flex-col md:pr-4">
                 <label htmlFor="data" className="block font-semibold text-zinc-700">Data de Lançamento</label>
                 <input type="date" value={formData.Data} id="Data" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" readOnly />

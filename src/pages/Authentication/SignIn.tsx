@@ -17,18 +17,18 @@ type AuthUserFormData = z.infer<typeof AuthUserFormSchema>;
 
 const SignIn: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string>("" as string);
   const [loggedInEmail, setLoggedInEmail] = useState("");
   const navigate = useNavigate(); // Use React Router's useHistory hook
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    setValue, // Add setValue function from useForm
+    setValue,
   } = useForm<AuthUserFormData>({
     resolver: zodResolver(AuthUserFormSchema),
   });
+  
 
   useEffect(() => {
     // Set value for email field when loggedInEmail changes
@@ -62,12 +62,12 @@ const SignIn: React.FC = () => {
         setError("Erro ao obter informações de autenticação.");
         setTimeout(() => setError(""), 2100);
       }
-    } catch (error) {
+    } catch (error: any) {
       setError(error.message);
       setTimeout(() => setError(""), 2100);
     } finally {
       setLoading(false);
-    }
+    }    
   }
   
   return (
@@ -76,7 +76,7 @@ const SignIn: React.FC = () => {
         <div className='boxLeft'>
           <form onSubmit={handleSubmit(AuthUser)}>
             <div className="boxRight boxRight md:hidden w-50 h-10 items-center justify-center ">
-              <Image imageLink={Four2}  />
+              <Image imageLink={Four2}  altImage="Four" />
             </div>
             <Title
               title="Four Work"
@@ -116,17 +116,15 @@ const SignIn: React.FC = () => {
                     id='button'
                     type='button' // Change type to button
                     content="Login"
-                    disabled={loading}
-                  />
+                    disabled={loading} link={''} target={''} p={''} span={''}                  />
                 </Link>
               ) : (
                 <Button
-                  name='button'
-                  id='button'
-                  type='submit' 
-                  content={loading ? "Aguarde..." : "Login"}
-                  disabled={loading}
-                />
+                    name='button'
+                    id='button'
+                    type='submit'
+                    content={loading ? "Aguarde..." : "Login"}
+                    disabled={loading} link={''} target={''} p={''} span={''}                />
               )}
             </div>
 
@@ -135,7 +133,8 @@ const SignIn: React.FC = () => {
         </div>
 
         <div className="boxRight hidden md:block">
-          <Image imageLink={Four}  />
+          <Image imageLink={Four} altImage="Four" />
+
         </div>
       </div>
     </div>

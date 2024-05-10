@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
 import TicketTable from '../Table/Table';
+import { SubmitHandler, FieldValues } from 'react-hook-form';
 
-export default function Apontamento({ loggedInEmail }) {
+export default function Apontamento({}) {
+  const [clientes, setClientes] = useState<{ _id: string; nomeCliente: string; codigoCliente: string; }[]>([]);
+  const [usuariosPorTipo, setUsuariosPorTipo] = useState<{ nomePessoa: string; codigo: string; ValorH: number; Email: string }[]>([]);
   const { register, handleSubmit, setValue } = useForm();
   const [formData, setFormData] = useState({
     codigo: '',
@@ -16,28 +19,34 @@ export default function Apontamento({ loggedInEmail }) {
     HorasT: 0,
     ValorAdc: 0,
     Data: '',
-    desc: ''
-  });
+    desc: '',
+    nomeCliente: '' // Add nomeCliente property here
+  });  
   const [tipoPessoaSelecionado, setTipoPessoaSelecionado] = useState('');
-  const [usuariosPorTipo, setUsuariosPorTipo] = useState([]);
-  const [clientes, setClientes] = useState([]);
   const [clienteSelecionado, setClienteSelecionado] = useState('');
-  const [ultimoCodigoRAT, setUltimoCodigoRAT] = useState(null);
+  const [ultimoCodigoRAT, setUltimoCodigoRAT] = useState<string | null>(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const codigoRAT = await gerarProximoCodigoRAT();
-        setUltimoCodigoRAT(codigoRAT);
-        setValue('RAT', codigoRAT);
+        // Ensure codigoRAT is defined before setting the state
+        if (codigoRAT) {
+          setUltimoCodigoRAT(codigoRAT);
+          setValue('RAT', codigoRAT);
+        } else {
+          console.error('Código RAT é undefined.');
+        }
       } catch (error) {
         console.error('Erro ao gerar código RAT:', error);
       }
     };
     fetchData();
   }, []);
+  
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const headers = {
         headers: {
@@ -161,7 +170,7 @@ const mostrarProximoCodigoRAT = async () => {
     mostrarProximoCodigoRAT();
   }, []);
 
-  const handleUsuarioChange = (nome) => {
+  const handleUsuarioChange = (nome: string) => {
     const selectedUser = usuariosPorTipo.find(user => user.nomePessoa === nome);
     if (selectedUser) {
       console.log("Dados do usuário selecionado:", selectedUser);
@@ -175,7 +184,7 @@ const mostrarProximoCodigoRAT = async () => {
     }
   };
   
-  const handleClienteChange = (name) => {
+  const handleClienteChange = (name: string) => {
     const selectedCliente = clientes.find(cliente => cliente.nomeCliente === name);
     if (selectedCliente) {
       console.log("Dados do cliente selecionado:", selectedCliente);
@@ -191,7 +200,7 @@ const mostrarProximoCodigoRAT = async () => {
   };
   
   useEffect(() => {
-    const buscarUsuariosPorTipo = async (tipo) => {
+    const buscarUsuariosPorTipo = async (tipo: string) => {
       try {
         const headers = {
           headers: {
@@ -234,11 +243,11 @@ const mostrarProximoCodigoRAT = async () => {
     buscarClientes();
   }, []);
 
-  const formatCurrency = (value) => {
+  const formatCurrency = (value: number) => {
     return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
   };
 
-  const formatHours = (hours) => {
+  const formatHours = (hours: number) => {
     const formattedHours = `${hours < 10 ? '0' : ''}${Math.floor(hours)}:${Math.round((hours % 1) * 60) < 10 ? '0' : ''}${Math.round((hours % 1) * 60)}`;
     return formattedHours;
   };
@@ -403,7 +412,7 @@ const mostrarProximoCodigoRAT = async () => {
 
         </form>
       </div>
-      {formData && <TicketTable formData={formData} />}
+      
     </DefaultLayout>
   );
 }

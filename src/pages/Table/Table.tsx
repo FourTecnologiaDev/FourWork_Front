@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom'; // Importe o hook useLocation aqui
 import DefaultLayout from '../../layout/DefaultLayout';
 import { IoMdAdd } from "react-icons/io";
@@ -6,12 +6,27 @@ import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import api from '../Authentication/scripts/api';
 import { MdDelete } from 'react-icons/md';
 
+interface TableItem {
+  _id: number;
+  RAT: string;
+  codigo: string;
+  nomePessoa: string;
+  tipoPessoa: string;
+  codigoCliente: string;
+  nomeCliente: string;
+  Data: string;
+  desc: string;
+  HorasT: number;
+  ValorH: number;
+  ValorAdc: number;
+}
 
-export default function TicketTable({ loggedInEmail }) {
-  const [tableData, setTableData] = useState([]);
+
+export default function TicketTable({ loggedInEmail }: { loggedInEmail: string }) {
+  const [tableData, setTableData] = useState<TableItem[]>([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const location = useLocation(); // Use o hook useLocation dentro do componente
-  const [formData, setFormData] = useState(null);
+
 
   // Extraia loggedInEmail da localização do state
   const loggedInEmailFromState = location.state?.loggedInEmail;
@@ -53,55 +68,49 @@ export default function TicketTable({ loggedInEmail }) {
 
 
 
-useEffect(() => {
-  console.log("loggedInEmail:", loggedInEmail); // Adicione este log para verificar o valor de loggedInEmail
-
-  const fetchTickets = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        return; // Se não houver token, não faça a chamada da API
+  useEffect(() => {
+    console.log("loggedInEmail:", loggedInEmail);
+  
+    const fetchTickets = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          return;
+        }
+  
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        };
+  
+        let response; // Declare response variable here
+  
+        if (loggedInEmail && loggedInEmail.endsWith("@fourtc.com.br")) {
+          response = await api.get('/gestaoatv', { headers });
+        } else {
+          response = await api.get('/gestaoatv', { headers }); // Remove const keyword here
+          const allData = response.data;
+          const filteredData = loggedInEmail && loggedInEmail.endsWith("@fourtc.com.br") ?
+            allData :
+            allData.filter((item: { Email: string; }) => item.Email === loggedInEmail);
+          setTableData(filteredData);
+        }
+  
+        console.log("Dados recebidos da API:", response.data);
+  
+        // Make sure response is defined before accessing its data
+        if (response) {
+          setTableData(response.data);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar tickets:', error);
+        setError('Erro ao carregar tickets. Por favor, tente novamente mais tarde.');
       }
-
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-
-      // Buscar todos os dados da rota /gestaoatv
-      let response;
-      if (loggedInEmail && loggedInEmail.endsWith("@fourtc.com.br")) {
-        // Se o e-mail termina com "@fourtc.com.br",
-        // buscar todos os dados sem filtrar por e-mail
-        response = await api.get('/gestaoatv', { headers });
-      } else {
-        // Caso contrário, filtrar os dados com base no e-mail logado
-        // Obter os dados da API
-        const response = await api.get('/gestaoatv', { headers });
-
-        // Extrair os dados da resposta
-        const allData = response.data;
-
-        // Filtrar os dados com base no e-mail logado
-        const filteredData = loggedInEmail && loggedInEmail.endsWith("@fourtc.com.br") ?
-          allData :
-          allData.filter(item => item.Email === loggedInEmail);
-
-        // Utilize diretamente os dados filtrados
-        setTableData(filteredData);
-      }
-
-      console.log("Dados recebidos da API:", response.data); // Adicione este log para verificar os dados recebidos da API
-
-      setTableData(response.data); // Definindo os dados filtrados na tableData
-    } catch (error) {
-      console.error('Erro ao carregar tickets:', error);
-      setError('Erro ao carregar tickets. Por favor, tente novamente mais tarde.');
-    }
-  };
-
-  fetchTickets();
-}, [loggedInEmail]);
+    };
+  
+    fetchTickets(); // Call the fetchTickets function
+  
+  }, [loggedInEmail]); // Add loggedInEmail as a dependency
   
   const Novo = () => {
     window.location.href = '/cadastro/Table';
@@ -130,45 +139,45 @@ useEffect(() => {
     }
   };
 
-  const formatarHora = (horas) => {
-    // Verifica se a entrada é válida
-    if (!horas || typeof horas !== 'string') {
-        return horas;
+  const formatarHora = (horas: string | number) => {
+    // Check if horas is a string
+    if (typeof horas === 'string') {
+        // Split the horas into hours and minutes
+        const [hours, minutes] = horas.split(":");
+
+        // Check if there are hours and minutes
+        if (hours && minutes) {
+            // Return the formatted time
+            return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+        }
     }
 
-    // Separa as horas e os minutos
-    const [hours, minutes] = horas.split(":");
-
-    // Verifica se há apenas uma hora e não há minutos
-    if (hours && !minutes && hours.length === 1) {
-        // Adiciona os minutos ":00" à hora
-        return `${hours}:00`;
-    }
-
-    // Verifica se as horas e os minutos foram corretamente separados
-    if (!hours || !minutes) {
-        return horas; // Retorna o valor de entrada se a separação não produzir as partes esperadas
-    }
-
-    // Retorna as horas formatadas com zero à esquerda para garantir dois dígitos
-    return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+    // Return a default value if horas is not a string or if it couldn't be formatted
+    return '00:00';
 };
 
+  
+
 
   
   
-  function formatarReal(valor) {
-    if (valor == null || isNaN(valor)) {
+  function formatarReal(valor: number | null | undefined | string): string {
+    if (valor == null || isNaN(Number(valor))) {
       return ''; // Return an empty string if valor is null, undefined, or not a number
     }
+  
+    // If valor is not a number, try parsing it
     if (typeof valor !== 'number') {
       valor = parseFloat(valor); // Try parsing the valor as a number
       if (isNaN(valor)) {
         return ''; // Return an empty string if parsing fails
       }
     }
+  
+    // Format the number as currency string
     return `R$${valor.toFixed(2).replace('.', ',')}`;
   }
+  
    
 
   return (
@@ -351,3 +360,8 @@ useEffect(() => {
     </DefaultLayout>
   );
 }
+
+function setError(_arg0: string) {
+  throw new Error('Function not implemented.');
+}
+

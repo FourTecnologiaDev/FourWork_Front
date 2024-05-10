@@ -1,41 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { IoMdAdd } from "react-icons/io";
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import api from '../Authentication/scripts/api';
-import { useLocation, Link } from 'react-router-dom'; // Importe o hook useLocation aqui
+import { useLocation } from 'react-router-dom'; 
+
+interface TableData {
+  _id: string;
+  ratcod: string;
+  Ratsenior: string;
+  seniorcod: string;
+  Stats: string;
+  Data: string;
+  // Add other properties as needed
+}
 
 function RatTable() {
-  const [tableData, setTableData] = useState([]);
-  const [error, setError] = useState(null);
-  const [isAuthorized, setIsAuthorized] = useState(false);
-  const location = useLocation(); // Use o hook useLocation dentro do componente
+  const [tableData, setTableData] = useState<TableData[]>([]);
+  const [, setError] = useState<string | null>(null); 
+  const [, setIsAuthorized] = useState<boolean>(false); 
+  const location = useLocation(); 
 
   useEffect(() => {
     const fetchTickets = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          return; // Se não houver token, não faça a chamada da API
+          return; 
         }
-
+  
         const headers = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         };
-
+  
         const response = await api.get('/rats', { headers });
-        setTableData(response.data); // Definindo os dados recebidos na tableData
+        setTableData(response.data); 
       } catch (error) {
-        console.error('Erro ao carregar tickets:', error);
-        setError('Erro ao carregar tickets. Por favor, tente novamente mais tarde.');
+        console.error('Error loading tickets:', error);
+        setError('Error loading tickets. Please try again later.'); 
       }
     };
-
+  
     fetchTickets();
   }, []);
 
-  // Verifique se loggedInEmail está definido
   useEffect(() => {
     const loggedInEmailFromState = location.state?.loggedInEmail;
 
@@ -69,16 +78,13 @@ function RatTable() {
     };
 
     checkAuthorization();
-  }, [location.state?.loggedInEmail]); // Adicione loggedInEmailFromState ao array de dependências
+  }, [location.state?.loggedInEmail]); 
 
   const Novo = () => {
-    window.location.href = '/RAT/Table'; // Redireciona para o URL desejado
+    window.location.href = '/RAT/Table'; 
   };
 
-
-
-  async function pdfDowload(_id:String) {
-    
+  async function pdfDowload(_id: string) {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -86,19 +92,17 @@ function RatTable() {
       }
 
       const headers = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       };
 
-      const responsePDF = await api.post("/ratsdowloadpdf", {_id:_id}, {
+      const responsePDF = await api.post("/ratsdowloadpdf", { _id: _id }, {
         ...headers,
         responseType: "blob",
       });
 
-      
-      
       if (responsePDF.data) {
         const blob = new Blob([responsePDF.data], {
           type: "application/pdf",
@@ -116,7 +120,6 @@ function RatTable() {
     } catch (error) {
       console.error('Erro ao carregar RAT:', error);
     }
-    
   }
 
   return (
@@ -177,7 +180,7 @@ function RatTable() {
                   </div>
                 </td>
                 <td className="cursor-pointer whitespace-nowrap text-center">
-                  <div className="py-2" onClick={()=>pdfDowload(item._id)}>
+                  <div className="py-2" onClick={() => pdfDowload(item._id)}>
                     Baixar
                   </div>
                 </td>
@@ -203,7 +206,6 @@ function RatTable() {
           <IoMdAdd className="ml-1" />
         </button>
       </div>
-
     </DefaultLayout>
   );
 }

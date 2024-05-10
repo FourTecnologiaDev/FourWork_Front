@@ -3,8 +3,6 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
 import TicketTable from './pages/Table/Table';
-import Profile from './pages/Profile';
-import SignUp from './pages/Authentication/SignUp';
 import Cadastro from './pages/Cadastro/Table';
 import RAT from './pages/RAT/table';
 import RatTable from './pages/RATS/table';
@@ -89,15 +87,6 @@ function App() {
           </>
         }
       />
-      
-      <Route
-        path="/profile"
-        element={
-          <>
-            <Profile />
-          </>
-        }
-      />
 
       <Route
         path="/login"
@@ -109,15 +98,6 @@ function App() {
         }
       />
 
-      <Route
-        path="/auth/signup"
-        element={
-          <>
-            <PageTitle title="Four Work - Gestão de atividades e faturamento" />
-            <SignUp />
-          </>
-        }
-      />
     </Routes>
   );
 }
