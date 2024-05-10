@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
-import TicketTable from '../Table/Table';
 import { SubmitHandler, FieldValues } from 'react-hook-form';
 
 export default function Apontamento({}) {

@@ -16,7 +16,7 @@ interface FormData {
 
 export default function Cadastro() {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm<FormData>();
-  const [formData, setFormData] = useState<FormData | null>(null);
+  const [, setFormData] = useState<FormData | null>(null);
   const [showCodigoRAT, setShowCodigoRAT] = useState(false);
   const [ratSelecionado, setRATSelecionado] = useState('');
   const [rats, setRats] = useState<any[]>([]);

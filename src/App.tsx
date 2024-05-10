@@ -41,7 +41,7 @@ function App() {
         element={
           <>
           <PageTitle title="Four Work - Gestão de atividades e faturamento" />
-          <Apontamento loggedInEmail={userEmail}/>
+          <Apontamento/>
           </> 
         }
       />
@@ -51,7 +51,7 @@ function App() {
         element={
           <>
           <PageTitle title="Four Work - Gestão de atividades e faturamento" />
-          <Cadastro loggedInEmail={userEmail}/>
+          <Cadastro/>
           </> 
         }
       />
