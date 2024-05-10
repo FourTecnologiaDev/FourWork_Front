@@ -143,6 +143,7 @@ export default function VisualizarRat() {
           </form>
         )}
       </div>
+      
       <RatTable />
     </DefaultLayout>
   );
