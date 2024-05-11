@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom'; // Importe o hook useLocation aqui
+import { Link, useLocation } from 'react-router-dom'; // Importe o hook useLocation aqui
 import DefaultLayout from '../../layout/DefaultLayout';
 import { IoMdAdd } from "react-icons/io";
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
@@ -342,18 +342,23 @@ export default function TicketTable({ loggedInEmail }: { loggedInEmail: string }
 
       {isAuthorized && (
         <div className="absolute bottom-4 left-4">
-          <button type="button" onClick={Novo} className="flex w-40 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
-            <span className="font-bold justify-center">Apontamento </span>
-            <IoMdAdd className="ml-1  " />
-          </button>
+          <Link to="/cadastro2/Apontamento">
+            <button type="button" className="flex w-40 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
+              <span className="font-bold">Apontamento</span>
+              <IoMdAdd className="ml-1" />
+            </button>
+          </Link>
         </div>
-      )}  
+      )}
+
       {isAuthorized && (  
       <div className='absolute bottom-4 left-55'>            
-        <button type="button" onClick={Apontamento} className="flex w-40 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
-          <span className="font-bold justify-center">Cadastrar</span>
-            <IoMdAdd className="ml-1  " />
-          </button>
+          <Link to="/Cadastro/Table">
+            <button type="button" className="flex w-40 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
+              <span className="font-bold">Apontamento</span>
+              <IoMdAdd className="ml-1" />
+            </button>
+          </Link>
         </div>
       )}
 
