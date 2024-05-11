@@ -112,13 +112,7 @@ export default function TicketTable({ loggedInEmail }: { loggedInEmail: string }
   
   }, [loggedInEmail]); // Add loggedInEmail as a dependency
   
-  const Novo = () => {
-    window.location.href = '/cadastro/Table';
-  };
-  
-  const Apontamento = () => {
-    window.location.href = '/cadastro2/Apontamento';
-  };
+
 
 
   const handleDeleteTransaction = async (id: number) => {
