@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
 import { SubmitHandler, FieldValues } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 
 export default function Apontamento({}) {
@@ -84,7 +85,7 @@ export default function Apontamento({}) {
         setShowAlert(true);
         
         setTimeout(() => {
-          window.location.href = '/Table/Table';
+          <Link to="/Table/Table"></Link>
         }, 2000);
       }
     } catch (error) {
