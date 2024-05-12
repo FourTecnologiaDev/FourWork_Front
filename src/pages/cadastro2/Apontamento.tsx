@@ -27,7 +27,7 @@ export default function Apontamento({}) {
   const [tipoPessoaSelecionado, setTipoPessoaSelecionado] = useState('');
   const [clienteSelecionado, setClienteSelecionado] = useState('');
   const [ultimoCodigoRAT, setUltimoCodigoRAT] = useState<string | null>(null);
-  const [showAlert, setShowAlert] = useState(false)
+  const [showAlert] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
