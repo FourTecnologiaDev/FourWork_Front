@@ -3,17 +3,20 @@ import { useForm } from 'react-hook-form';
 import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
 import { SubmitHandler, FieldValues } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 export default function Apontamento({}) {
   const [clientes, setClientes] = useState<{ _id: string; nomeCliente: string; codigoCliente: string; }[]>([]);
-  const [usuariosPorTipo, setUsuariosPorTipo] = useState<{ nomePessoa: string; codigo: string; ValorH: number; Email: string }[]>([]);
+  const [usuariosPorTipo, setUsuariosPorTipo] = useState<{
+    email: string; nomePessoa: string; codigo: string; ValorH: number; Email: string 
+}[]>([]);
   const { register, handleSubmit, setValue } = useForm();
   const [formData, setFormData] = useState({
     codigo: '',
     codigoCliente: '',
     RAT: '',
     nomePessoa: '',
-    Email: '',
+    email: '',
     ValorH: 0,
     HorasT: 0,
     ValorAdc: 0,
@@ -24,7 +27,7 @@ export default function Apontamento({}) {
   const [tipoPessoaSelecionado, setTipoPessoaSelecionado] = useState('');
   const [clienteSelecionado, setClienteSelecionado] = useState('');
   const [ultimoCodigoRAT, setUltimoCodigoRAT] = useState<string | null>(null);
-
+  const [showAlert, setShowAlert] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +67,7 @@ export default function Apontamento({}) {
         data.codigo = formData.codigo; 
         data.ValorH = formData.ValorH;
         data.nomePessoa = formData.nomePessoa;
-        data.Email = formData.Email;
+        data.email = formData.email;
         data.tipoPessoa = tipoPessoaSelecionado;
         const headers = {
           headers: {
@@ -78,8 +81,11 @@ export default function Apontamento({}) {
         // Atualizar o próximo código RAT no formulário após enviar os dados com sucesso
         mostrarProximoCodigoRAT();
         
-        // Redirecionar para a página Table/Table após o envio bem-sucedido
-        window.location.href = '/Table/Table';
+        setShowAlert(true);
+        
+        setTimeout(() => {
+          window.location.href = '/Table/Table';
+        }, 2000);
       }
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
@@ -178,7 +184,7 @@ const mostrarProximoCodigoRAT = async () => {
         nomePessoa: selectedUser.nomePessoa,
         codigo: selectedUser.codigo,
         ValorH: selectedUser.ValorH,
-        Email: selectedUser.Email
+        email: selectedUser.email
       });
     }
   };
@@ -310,10 +316,10 @@ const mostrarProximoCodigoRAT = async () => {
               <input
                 type="text"
                 readOnly
-                value={formData ? formData.Email : ''}
+                value={formData ? formData.email : ''}
                 id="email"
                 className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none"
-                {...register('Email')}
+                {...register('email')}
               />
             </div>
             <div className="flex w-[300px] flex-col md:pr-4 mt-4">
@@ -403,15 +409,21 @@ const mostrarProximoCodigoRAT = async () => {
             <label htmlFor="desc" className="block font-semibold text-zinc-700">Descrição Atividades</label>
             <textarea className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" {...register('desc')}></textarea>
           </div>
-          <div className="flex justify-end">
-            <button type="submit" className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
-              <span className="font-bold">Enviar</span>
-            </button>
+          <div className="flex justify-end">        
+              <button type="submit" className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
+                <span className="font-bold">Enviar</span>
+              </button>        
           </div>
 
         </form>
       </div>
-      
+      {showAlert && (
+          <div className="fixed top-0 inset-x-0 z-50 flex items-center justify-center">
+            <div className="bg-white border border-gray-300 shadow-lg rounded-lg p-4">
+              <p className="text-xl font-semibold text-green-500">Usuário cadastrado com sucesso! 🍀</p>
+            </div>
+          </div>
+        )}
     </DefaultLayout>
   );
 }

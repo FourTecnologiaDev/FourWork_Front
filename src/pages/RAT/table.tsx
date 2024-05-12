@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
+import { Link } from 'react-router-dom';
 
 interface FormData {
   Ratcod: string | Blob;
@@ -99,16 +100,19 @@ export default function Cadastro() {
       <div className="flex h-screen max-w-[980px] flex-col py-6 sm:ml-44">
         <div className="mb-4 flex min-w-[980px] flex-row items-center justify-between">
           <h1 className="text-[25px] font-bold text-zinc-700">Cadastro</h1>
-          <button 
-            type="button" 
-            className="flex w-36 items-center justify-center rounded-md bg-slate-600 py-2 text-center font-medium text-white transition hover:bg-slate-700"
-            onClick={Voltar}
-          > 
-            <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 1024 1024" className="ml-1 text-lg" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-              <path d="M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 0 0 0 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z"></path>
-            </svg>
-            Voltar
-          </button>
+          <Link to="/RATS/Table">         
+            <button 
+              type="button" 
+              className="flex w-36 items-center justify-center rounded-md bg-slate-600 py-2 text-center font-medium text-white transition hover:bg-slate-700"
+              onClick={Voltar}
+            > 
+              <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 1024 1024" className="ml-1 text-lg" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                <path d="M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 0 0 0 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z"></path>
+              </svg>
+              Voltar
+            </button>
+          </Link>
+
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="mx-auto p-8 rounded-lg ">
           <div className="mb-4 flex flex-row flex-wrap">
@@ -170,9 +174,12 @@ export default function Cadastro() {
             </div>
           </div>
           <div className="flex justify-end">
-            <button type="submit" className="mt-60 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
-              <span className="font-bold">Enviar</span>
-            </button>
+            <Link to="/RATS/Table">            
+              <button type="submit" className="mt-60 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
+                <span className="font-bold">Enviar</span>
+              </button>
+            </Link>
+
           </div>
         </form>
       </div>

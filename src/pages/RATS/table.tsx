@@ -3,7 +3,7 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import { IoMdAdd } from "react-icons/io";
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import api from '../Authentication/scripts/api';
-import { useLocation } from 'react-router-dom'; 
+import { Link, useLocation } from 'react-router-dom'; 
 
 interface TableData {
   _id: string;
@@ -201,10 +201,12 @@ function RatTable() {
       </div>
 
       <div className="absolute bottom-4 left-4">
-        <button type="button" onClick={Novo} className="flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
+        <Link to="/RAT/Table">        
+        <button type="button" className="flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
           <span className="font-bold justify-center">Novo </span>
           <IoMdAdd className="ml-1" />
-        </button>
+        </button></Link>
+
       </div>
     </DefaultLayout>
   );

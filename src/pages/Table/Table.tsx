@@ -338,7 +338,7 @@ export default function TicketTable({ loggedInEmail }: { loggedInEmail: string }
         <div className="absolute bottom-4 left-4">
           <Link to="/cadastro2/Apontamento">
             <button type="button" className="flex w-40 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
-              <span className="font-bold">Apontamento</span>
+              <span className="font-bold">Cadastro</span>
               <IoMdAdd className="ml-1" />
             </button>
           </Link>

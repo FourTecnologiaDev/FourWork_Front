@@ -4,6 +4,7 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
 import TicketTable from '../Table/Table';
 import { SubmitHandler, FieldValues  } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 export default function Cadastro({ }) {
   const { register, handleSubmit, watch } = useForm();
@@ -20,7 +21,7 @@ export default function Cadastro({ }) {
         },
       };
   
-      await api.post('/novoUsuario', { email: data.email, senha: data.senha }, headers);
+      await api.post('/novoUsuario', { email: data.email, password: data.password }, headers);
       await api.post('/cadPessoa', data, headers); 
   
       setShowAlert(true);
@@ -101,9 +102,11 @@ export default function Cadastro({ }) {
       <div className="flex h-screen max-w-[980px] flex-col py-6 sm:ml-44">
         <div className="mb-4 flex min-w-[980px] flex-row items-center justify-between">
           <h1 className="text-[25px] font-bold text-zinc-700">Cadastro</h1>
-          <button type="button" className="flex w-36 items-center justify-center rounded-md bg-slate-600 py-2 text-center font-medium text-white transition hover:bg-slate-700">
-            Voltar
-          </button>
+          <Link to="/Table/Table">
+            <button type="button" className="flex w-36 items-center justify-center rounded-md bg-slate-600 py-2 text-center font-medium text-white transition hover:bg-slate-700">
+              Voltar
+            </button>
+          </Link>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="mx-auto p-8  rounded-lg ">         
          <div className="mb-4 flex flex-row flex-wrap mt-4">
@@ -125,7 +128,7 @@ export default function Cadastro({ }) {
             </div>
             <div className="flex w-[250px] flex-col md:pr-4">
               <label htmlFor="senha" className="block font-semibold text-zinc-700">Senha</label>
-              <input type="text" {...register('senha')} id="senha" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" />
+              <input type="text" {...register('password')} id="senha" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" />
             </div>
           </div>
 
@@ -197,9 +200,9 @@ export default function Cadastro({ }) {
           </div>
 
           <div className="flex justify-end">
-            <button /*onClick={() => window.location.href='/Table/Table'}*/ type="submit" className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
-              <span className=" font-bold">Enviar</span>
-            </button>
+              <button type="submit" className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
+                <span className=" font-bold">Enviar</span>
+              </button>
           </div>
 
         </form>
