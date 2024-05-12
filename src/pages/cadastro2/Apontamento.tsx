@@ -4,7 +4,7 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
 import { SubmitHandler, FieldValues } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-
+import { useHistory } from 'react-router-dom';
 
 export default function Apontamento({}) {
   const [clientes, setClientes] = useState<{ _id: string; nomeCliente: string; codigoCliente: string; }[]>([]);
@@ -23,7 +23,7 @@ export default function Apontamento({}) {
     ValorAdc: 0,
     Data: '',
     desc: '',
-    nomeCliente: '' // Add nomeCliente property here
+    nomeCliente: '' 
   });  
   const [tipoPessoaSelecionado, setTipoPessoaSelecionado] = useState('');
   const [clienteSelecionado, setClienteSelecionado] = useState('');
@@ -57,6 +57,8 @@ export default function Apontamento({}) {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       };
+      const history = useHistory();
+
   
       // Verificar se o código RAT já existe
       const resposta = await api.get(`/gestaoatv/${data.RAT}`, headers);
@@ -85,8 +87,8 @@ export default function Apontamento({}) {
         setShowAlert(true);
         
         setTimeout(() => {
-          <Link to="/Table/Table"></Link>
-        }, 2000);
+          history.push("/Table/Table");
+        }, 2000);        
       }
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
