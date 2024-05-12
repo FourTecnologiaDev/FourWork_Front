@@ -80,10 +80,6 @@ function RatTable() {
     checkAuthorization();
   }, [location.state?.loggedInEmail]); 
 
-  const Novo = () => {
-    window.location.href = '/RAT/Table'; 
-  };
-
   async function pdfDowload(_id: string) {
     try {
       const token = localStorage.getItem("token");

@@ -27,7 +27,7 @@ export default function Apontamento({}) {
   const [tipoPessoaSelecionado, setTipoPessoaSelecionado] = useState('');
   const [clienteSelecionado, setClienteSelecionado] = useState('');
   const [ultimoCodigoRAT, setUltimoCodigoRAT] = useState<string | null>(null);
-  const [showAlert] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,7 +81,11 @@ export default function Apontamento({}) {
         // Atualizar o próximo código RAT no formulário após enviar os dados com sucesso
         mostrarProximoCodigoRAT();
         
-        <Link to="/Table/Table"></Link>
+        setShowAlert(true);
+        
+        setTimeout(() => {
+          window.location.href = '/Table/Table';
+        }, 2000);
       }
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
