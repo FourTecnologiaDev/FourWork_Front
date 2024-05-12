@@ -81,11 +81,7 @@ export default function Apontamento({}) {
         // Atualizar o próximo código RAT no formulário após enviar os dados com sucesso
         mostrarProximoCodigoRAT();
         
-        setShowAlert(true);
-        
-        setTimeout(() => {
-          window.location.href = '/Table/Table';
-        }, 2000);
+        <Link to="/Table/Table"></Link>
       }
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
