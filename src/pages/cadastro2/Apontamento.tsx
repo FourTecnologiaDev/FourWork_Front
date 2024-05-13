@@ -261,21 +261,15 @@ const mostrarProximoCodigoRAT = async () => {
   }, [ultimoCodigoRAT, setValue]);
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | undefined;
+    let timer;
     if (redirect) {
       setShowAlert(true);
-      
       timer = setTimeout(() => {
         // Após 2 segundos, mude o valor de 'redirect' para 'false'
         setRedirect(false);
       }, 1000);
     }
-
-    return () => {
-      if (timer) clearTimeout(timer); // Limpar o timer quando o componente for desmontado
-    };
   }, [redirect]);
-
 
 
   const handleClick = () => {
@@ -429,15 +423,26 @@ const mostrarProximoCodigoRAT = async () => {
             <textarea className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" {...register('desc')}></textarea>
           </div>
           <div className="flex justify-end">        
-          <Link to={redirect ? "/Table/Table" : ""}>
+          {redirect ? (
+            <Link to="/Table/Table">
+              <button
+                type="submit"
+                className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700"
+                onClick={handleClick}
+              >
+                <span className="font-bold">Enviar</span>
+              </button>
+            </Link>
+          ) : (
             <button
               type="submit"
               className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700"
-              onClick={handleClick} // Altere o valor de 'redirect' para 'true' quando o botão for clicado
+              onClick={handleClick}
             >
               <span className="font-bold">Enviar</span>
             </button>
-          </Link>    
+          )}
+  
           </div>
 
         </form>
