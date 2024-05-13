@@ -133,21 +133,17 @@ export default function TicketTable({ loggedInEmail }: { loggedInEmail: string }
     }
   };
 
-  const formatarHora = (horas: string | number) => {
-    // Check if horas is a string
-    if (typeof horas === 'string') {
-        // Split the horas into hours and minutes
-        const [hours, minutes] = horas.split(":");
+  const formatarHora = (horas: number) => {
+    // Extrair as horas inteiras e os minutos da parte decimal
+    const horasInteiras = Math.floor(horas);
+    const minutos = Math.round((horas - horasInteiras) * 60);
 
-        // Check if there are hours and minutes
-        if (hours && minutes) {
-            // Return the formatted time
-            return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
-        }
-    }
+    // Formatar as horas e minutos com dois dígitos
+    const horasFormatadas = String(horasInteiras).padStart(2, '0');
+    const minutosFormatados = String(minutos).padStart(2, '0');
 
-    // Return a default value if horas is not a string or if it couldn't be formatted
-    return '00:00';
+    // Retornar a hora formatada no formato 'HH:MM'
+    return `${horasFormatadas}:${minutosFormatados}`;
 };
 
   
