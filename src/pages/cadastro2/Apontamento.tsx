@@ -427,26 +427,15 @@ const mostrarProximoCodigoRAT = async () => {
             <textarea className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" {...register('desc')}></textarea>
           </div>
           <div className="flex justify-end">        
-          {redirect ? (
-          <Link to="/Table/Table">
-            <button
-              type="submit"
-              className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700"
-              onClick={handleClick}
-            >
-              <span className="font-bold">Enviar</span>
-            </button>
-          </Link>
-        ) : (
-          <button
-            type="submit"
-            className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700"
-            onClick={handleClick}
-          >
-            <span className="font-bold">Enviar</span>
-          </button>
-        )}
-  
+            <Link to="/Table/Table">
+              <button
+                type="submit"
+                className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700"
+                onClick={handleClick}
+              >
+                <span className="font-bold">Enviar</span>
+              </button>
+            </Link>
           </div>
 
         </form>
@@ -454,7 +443,7 @@ const mostrarProximoCodigoRAT = async () => {
       {showAlert && (
           <div className="fixed top-0 inset-x-0 z-50 flex items-center justify-center">
             <div className="bg-white border border-gray-300 shadow-lg rounded-lg p-4">
-              <p className="text-xl font-semibold text-green-500">Usuário cadastrado com sucesso! 🍀</p>
+              <p className="text-xl font-semibold text-green-500">Apontamento cadastrado com sucesso! 🍀</p>
             </div>
           </div>
         )}
