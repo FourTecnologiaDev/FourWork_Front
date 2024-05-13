@@ -263,15 +263,19 @@ const mostrarProximoCodigoRAT = async () => {
   }, [ultimoCodigoRAT, setValue]);
 
   useEffect(() => {
+    let timer: NodeJS.Timeout | undefined; // Definindo o tipo de 'timer'
     if (redirect) {
-      const timer = setTimeout(() => {
-        // Após 2 segundos, mude o valor de 'redirect' para 'true'
-        setRedirect(true);
+      timer = setTimeout(() => {
+        // Após 2 segundos, mude o valor de 'redirect' para 'false'
+        setRedirect(false);
       }, 2000);
-
-      return () => clearTimeout(timer);
     }
+
+    return () => {
+      if (timer) clearTimeout(timer); // Limpar o timer quando o componente for desmontado
+    };
   }, [redirect]);
+
 
 
   
@@ -422,7 +426,7 @@ const mostrarProximoCodigoRAT = async () => {
             <textarea className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" {...register('desc')}></textarea>
           </div>
           <div className="flex justify-end">        
-          <Link to="/Table/Table">
+          <Link to={redirect ? "/Table/Table" : ""}>
             <button
               type="submit"
               className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700"
