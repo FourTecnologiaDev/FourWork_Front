@@ -83,7 +83,7 @@ function App() {
         element={
           <>
             <PageTitle title="Four Work - Gestão de atividades e faturamento" />
-            <TicketTable loggedInEmail={userEmail} />
+           
           </>
         }
       />

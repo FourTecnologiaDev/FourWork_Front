@@ -2,13 +2,11 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
-import TicketTable from '../Table/Table';
 import { SubmitHandler, FieldValues  } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 export default function Cadastro({ }) {
   const { register, handleSubmit, watch } = useForm();
-  const [formData,] = useState("");
   const tipoPessoa = watch("TipoPessoa");
   const [showAlert, setShowAlert] = useState(false)
   const navigate = useNavigate();
