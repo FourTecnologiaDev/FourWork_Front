@@ -82,9 +82,7 @@ export default function Apontamento({}) {
         // Atualizar o próximo código RAT no formulário após enviar os dados com sucesso
         mostrarProximoCodigoRAT();
         
-        setShowAlert(true);
         
-
       }
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
@@ -265,10 +263,12 @@ const mostrarProximoCodigoRAT = async () => {
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
     if (redirect) {
+      setShowAlert(true);
+      
       timer = setTimeout(() => {
         // Após 2 segundos, mude o valor de 'redirect' para 'false'
         setRedirect(false);
-      }, 2000);
+      }, 1000);
     }
 
     return () => {
