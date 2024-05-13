@@ -3,8 +3,7 @@ import { useForm } from 'react-hook-form';
 import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
 import { SubmitHandler, FieldValues } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+import { Link, redirect } from 'react-router-dom';
 
 export default function Apontamento({}) {
   const [clientes, setClientes] = useState<{ _id: string; nomeCliente: string; codigoCliente: string; }[]>([]);
@@ -29,6 +28,7 @@ export default function Apontamento({}) {
   const [clienteSelecionado, setClienteSelecionado] = useState('');
   const [ultimoCodigoRAT, setUltimoCodigoRAT] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState(false)
+  const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,8 +57,6 @@ export default function Apontamento({}) {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       };
-      const history = useHistory();
-
   
       // Verificar se o código RAT já existe
       const resposta = await api.get(`/gestaoatv/${data.RAT}`, headers);
@@ -86,9 +84,7 @@ export default function Apontamento({}) {
         
         setShowAlert(true);
         
-        setTimeout(() => {
-          history.push("/Table/Table");
-        }, 2000);        
+
       }
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
@@ -266,6 +262,19 @@ const mostrarProximoCodigoRAT = async () => {
     }
   }, [ultimoCodigoRAT, setValue]);
 
+  useEffect(() => {
+    if (redirect) {
+      const timer = setTimeout(() => {
+        // Após 2 segundos, mude o valor de 'redirect' para 'true'
+        setRedirect(true);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [redirect]);
+
+
+  
   return (
     <DefaultLayout>
       <div className="flex h-screen max-w-[980px] flex-col py-6 sm:ml-44">
@@ -413,9 +422,15 @@ const mostrarProximoCodigoRAT = async () => {
             <textarea className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" {...register('desc')}></textarea>
           </div>
           <div className="flex justify-end">        
-              <button type="submit" className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
-                <span className="font-bold">Enviar</span>
-              </button>        
+          <Link to="/Table/Table">
+            <button
+              type="submit"
+              className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700"
+              onClick={() => setRedirect(true)} // Altere o valor de 'redirect' para 'true' quando o botão for clicado
+            >
+              <span className="font-bold">Enviar</span>
+            </button>
+          </Link>    
           </div>
 
         </form>
