@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface FormData {
   Ratcod: string | Blob;
@@ -23,6 +23,8 @@ export default function Cadastro() {
   const [showCodigoRAT, setShowCodigoRAT] = useState(false);
   const [ratSelecionado, setRATSelecionado] = useState('');
   const [rats, setRats] = useState<any[]>([]);
+  const navigate = useNavigate();
+  const [showAlert, setShowAlert] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
@@ -69,13 +71,18 @@ export default function Cadastro() {
         console.error('Erro ao cadastrar RAT:', response.statusText);
       }
 
+      setShowAlert(true);
+  
+      setTimeout(() => {
+        navigate('/Table/Table');
+      }, 2000);
     } catch (error) {
       console.error('Erro ao cadastrar RAT:', error);
     }
   };
   
   const Voltar = () => {
-    window.location.href = '/RATS/Table';
+    navigate('/Table/Table');
   };
 
   const handleRATChange = (codigo: string) => {
@@ -99,8 +106,7 @@ export default function Cadastro() {
     <DefaultLayout>
       <div className="flex h-screen max-w-[980px] flex-col py-6 sm:ml-44">
         <div className="mb-4 flex min-w-[980px] flex-row items-center justify-between">
-          <h1 className="text-[25px] font-bold text-zinc-700">Cadastro</h1>
-          <Link to="/RATS/Table">         
+          <h1 className="text-[25px] font-bold text-zinc-700">Cadastro</h1>      
             <button 
               type="button" 
               className="flex w-36 items-center justify-center rounded-md bg-slate-600 py-2 text-center font-medium text-white transition hover:bg-slate-700"
@@ -111,7 +117,7 @@ export default function Cadastro() {
               </svg>
               Voltar
             </button>
-          </Link>
+
 
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="mx-auto p-8 rounded-lg ">
@@ -173,17 +179,21 @@ export default function Cadastro() {
               </select>
             </div>
           </div>
-          <div className="flex justify-end">
-            <Link to="/RATS/Table">            
+          <div className="flex justify-end">          
               <button type="submit" className="mt-60 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700">
                 <span className="font-bold">Enviar</span>
-              </button>
-            </Link>
+              </button>   
 
           </div>
         </form>
       </div>
-      
+        {showAlert && (
+          <div className="fixed top-0 inset-x-0 z-50 flex items-center justify-center">
+            <div className="bg-white border border-gray-300 shadow-lg rounded-lg p-4">
+              <p className="text-xl font-semibold text-green-500">Usuário cadastrado com sucesso! 🍀</p>
+            </div>
+          </div>
+        )}
     </DefaultLayout>
   );
 }

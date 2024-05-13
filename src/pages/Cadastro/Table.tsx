@@ -4,13 +4,14 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
 import TicketTable from '../Table/Table';
 import { SubmitHandler, FieldValues  } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function Cadastro({ }) {
   const { register, handleSubmit, watch } = useForm();
   const [formData,] = useState("");
   const tipoPessoa = watch("TipoPessoa");
   const [showAlert, setShowAlert] = useState(false)
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
@@ -27,7 +28,7 @@ export default function Cadastro({ }) {
       setShowAlert(true);
   
       setTimeout(() => {
-        window.location.href = '/Table/Table';
+        navigate('/Table/Table');
       }, 2000);
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
@@ -97,16 +98,19 @@ export default function Cadastro({ }) {
     return telefone;
   };
 
+  const Voltar = () => {
+    navigate('/Table/Table');
+  }
+
   return (
     <DefaultLayout>
       <div className="flex h-screen max-w-[980px] flex-col py-6 sm:ml-44">
         <div className="mb-4 flex min-w-[980px] flex-row items-center justify-between">
           <h1 className="text-[25px] font-bold text-zinc-700">Cadastro</h1>
-          <Link to="/Table/Table">
-            <button type="button" className="flex w-36 items-center justify-center rounded-md bg-slate-600 py-2 text-center font-medium text-white transition hover:bg-slate-700">
+            <button type="button" onClick={Voltar} className="flex w-36 items-center justify-center rounded-md bg-slate-600 py-2 text-center font-medium text-white transition hover:bg-slate-700">
               Voltar
             </button>
-          </Link>
+         
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="mx-auto p-8  rounded-lg ">         
          <div className="mb-4 flex flex-row flex-wrap mt-4">

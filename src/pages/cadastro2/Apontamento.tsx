@@ -28,7 +28,7 @@ export default function Apontamento({}) {
   const [tipoPessoaSelecionado, setTipoPessoaSelecionado] = useState('');
   const [clienteSelecionado, setClienteSelecionado] = useState('');
   const [ultimoCodigoRAT, setUltimoCodigoRAT] = useState<string | null>(null);
-  const [showAlert] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
   const navigate = useNavigate(); 
 
   useEffect(() => {
@@ -82,10 +82,10 @@ export default function Apontamento({}) {
   
         // Atualizar o próximo código RAT no formulário após enviar os dados com sucesso
         mostrarProximoCodigoRAT();
-        
+        setShowAlert(true);
         setTimeout(() => {
           navigate('/Table/Table');
-        }, 2000); // Tempo em milissegundos
+        }, 2000); 
       }
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
@@ -264,14 +264,16 @@ const mostrarProximoCodigoRAT = async () => {
   }, [ultimoCodigoRAT, setValue]);
 
 
-
+  const Voltar = () => {
+    navigate('/Table/Table');
+  };
   
   return (
     <DefaultLayout>
       <div className="flex h-screen max-w-[980px] flex-col py-6 sm:ml-44">
         <div className="mb-4 flex min-w-[980px] flex-row items-center justify-between">
           <h1 className="text-[25px] font-bold text-zinc-700">Apontamento</h1>
-          <button type="button" className="flex w-36 items-center justify-center rounded-md bg-slate-600 py-2 text-center font-medium text-white transition hover:bg-slate-700">
+          <button type="button" onClick={Voltar} className="flex w-36 items-center justify-center rounded-md bg-slate-600 py-2 text-center font-medium text-white transition hover:bg-slate-700">
             Voltar
           </button>
         </div>
