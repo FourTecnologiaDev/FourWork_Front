@@ -3,7 +3,8 @@ import { useForm } from 'react-hook-form';
 import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
 import { SubmitHandler, FieldValues } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function Apontamento({}) {
   const [clientes, setClientes] = useState<{ _id: string; nomeCliente: string; codigoCliente: string; }[]>([]);
@@ -76,13 +77,15 @@ export default function Apontamento({}) {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         };
-    
+        const navigate = useNavigate();
         await api.post('/gestaoatv', data, headers);
   
         // Atualizar o próximo código RAT no formulário após enviar os dados com sucesso
         mostrarProximoCodigoRAT();
         
-        
+        setTimeout(() => {
+          navigate('/Table/Table');
+        }, 2000); // Tempo em milissegundos
       }
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
@@ -262,12 +265,6 @@ const mostrarProximoCodigoRAT = async () => {
 
 
 
-
-  const handleClick = () => {
-    setTimeout(() => {
-      <Link to="/Table/Table"></Link>
-    }, 2000);
-  };
   
   return (
     <DefaultLayout>
@@ -416,15 +413,15 @@ const mostrarProximoCodigoRAT = async () => {
             <textarea className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" {...register('desc')}></textarea>
           </div>
           <div className="flex justify-end">        
-            <Link to="/Table/Table">
+         
               <button
                 type="submit"
                 className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700"
-                onClick={handleClick}
+                
               >
                 <span className="font-bold">Enviar</span>
               </button>
-            </Link>
+      
           </div>
 
         </form>
