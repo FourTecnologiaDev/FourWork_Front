@@ -20,14 +20,15 @@ export default function Cadastro({ }) {
         },
       };
   
-      await api.post('/novoUsuario', { email: data.email, password: data.password }, headers);
+      
       await api.post('/cadPessoa', data, headers); 
-  
+      await api.post('/novoUsuario', { email: data.email, password: data.password }, headers);
+
       setShowAlert(true);
   
       setTimeout(() => {
         navigate('/Table/Table');
-      }, 2000);
+      }, 3000);
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
     }
