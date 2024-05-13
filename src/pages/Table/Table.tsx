@@ -144,7 +144,7 @@ export default function TicketTable({ loggedInEmail }: { loggedInEmail: string }
 
     // Retornar a hora formatada no formato 'HH:MM'
     return `${horasFormatadas}:${minutosFormatados}`;
-};
+  };
 
   
 
