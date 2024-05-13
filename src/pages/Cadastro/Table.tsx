@@ -130,8 +130,8 @@ export default function Cadastro({ }) {
               <input type="text" {...register('email')} id="email" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" />
             </div>
             <div className="flex w-[250px] flex-col md:pr-4">
-              <label htmlFor="senha" className="block font-semibold text-zinc-700">Senha</label>
-              <input type="text" {...register('password')} id="senha" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" />
+              <label htmlFor="password" className="block font-semibold text-zinc-700">Senha</label>
+              <input type="text" {...register('password')} id="password" className="rounded-md border border-zinc-400 px-2 py-1 text-black focus:border-blue-500 focus:outline-none" />
             </div>
           </div>
 
