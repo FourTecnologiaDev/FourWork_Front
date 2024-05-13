@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import DefaultLayout from '../../layout/DefaultLayout';
 import api from '../Authentication/scripts/api';
 import { SubmitHandler, FieldValues } from 'react-hook-form';
-import { Link, redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Apontamento({}) {
   const [clientes, setClientes] = useState<{ _id: string; nomeCliente: string; codigoCliente: string; }[]>([]);
