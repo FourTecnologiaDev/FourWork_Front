@@ -25,9 +25,9 @@ export default function Cadastro({ }) {
 
       setShowAlert(true);
   
-      //setTimeout(() => {
-        //navigate('/Table/Table');
-     // }, 3000);
+      setTimeout(() => {
+        navigate('/Table/Table');
+      }, 3000);
     } catch (error) {
       console.error('Erro ao enviar dados:', error);
     }
