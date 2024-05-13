@@ -261,7 +261,7 @@ const mostrarProximoCodigoRAT = async () => {
   }, [ultimoCodigoRAT, setValue]);
 
   useEffect(() => {
-    let timer;
+    let timer: string | number | NodeJS.Timeout | undefined;
     if (redirect) {
       setShowAlert(true);
       timer = setTimeout(() => {
@@ -269,6 +269,10 @@ const mostrarProximoCodigoRAT = async () => {
         setRedirect(false);
       }, 1000);
     }
+
+    return () => {
+      if (timer) clearTimeout(timer); // Limpar o timer quando o componente for desmontado
+    };
   }, [redirect]);
 
 
@@ -424,16 +428,7 @@ const mostrarProximoCodigoRAT = async () => {
           </div>
           <div className="flex justify-end">        
           {redirect ? (
-            <Link to="/Table/Table">
-              <button
-                type="submit"
-                className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700"
-                onClick={handleClick}
-              >
-                <span className="font-bold">Enviar</span>
-              </button>
-            </Link>
-          ) : (
+          <Link to="/Table/Table">
             <button
               type="submit"
               className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700"
@@ -441,7 +436,16 @@ const mostrarProximoCodigoRAT = async () => {
             >
               <span className="font-bold">Enviar</span>
             </button>
-          )}
+          </Link>
+        ) : (
+          <button
+            type="submit"
+            className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700"
+            onClick={handleClick}
+          >
+            <span className="font-bold">Enviar</span>
+          </button>
+        )}
   
           </div>
 
