@@ -29,7 +29,7 @@ export default function Apontamento({}) {
   const [clienteSelecionado, setClienteSelecionado] = useState('');
   const [ultimoCodigoRAT, setUltimoCodigoRAT] = useState<string | null>(null);
   const [showAlert] = useState(false)
-
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,7 +77,7 @@ export default function Apontamento({}) {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         };
-        const navigate = useNavigate();
+        
         await api.post('/gestaoatv', data, headers);
   
         // Atualizar o próximo código RAT no formulário após enviar os dados com sucesso
