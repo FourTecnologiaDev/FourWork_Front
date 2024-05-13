@@ -22,7 +22,6 @@ export default function Cadastro({ }) {
   
       
       await api.post('/cadPessoa', data, headers); 
-      await api.post('/novoUsuario', { email: data.email, password: data.password }, headers);
 
       setShowAlert(true);
   
