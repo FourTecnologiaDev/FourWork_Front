@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom'; // Importe o hook useLocation aqui
+import { Link, useLocation } from 'react-router-dom';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { IoMdAdd } from "react-icons/io";
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
@@ -21,17 +21,14 @@ interface TableItem {
   ValorAdc: number;
 }
 
-
-export default function TicketTable({ loggedInEmail }: { loggedInEmail: string }) {
+export default function TicketTable() {
   const [tableData, setTableData] = useState<TableItem[]>([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const location = useLocation(); // Use o hook useLocation dentro do componente
+  const [loggedInEmail, setLoggedInEmail] = useState<string | null>(null);
+  const location = useLocation();
 
-
-  // Extraia loggedInEmail da localização do state
   const loggedInEmailFromState = location.state?.loggedInEmail;
 
-  // Verifique se loggedInEmail está definido
   useEffect(() => {
     if (!loggedInEmailFromState) {
       console.log('Usuário autorizado: loggedInEmail não definido');
@@ -64,9 +61,20 @@ export default function TicketTable({ loggedInEmail }: { loggedInEmail: string }
     };
 
     checkAuthorization();
-  }, [loggedInEmailFromState]); // Adicione loggedInEmailFromState ao array de dependências
+  }, [loggedInEmailFromState]);
 
+  useEffect(() => {
+    const loggedInEmailFromStorage = localStorage.getItem('loggedInEmail');
 
+    if (loggedInEmailFromStorage) {
+      setLoggedInEmail(loggedInEmailFromStorage);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Salvar o loggedInEmail no localStorage
+    localStorage.setItem('loggedInEmail', loggedInEmail || '');
+  }, [loggedInEmail]);
 
   useEffect(() => {
     console.log("loggedInEmail:", loggedInEmail);
@@ -83,12 +91,12 @@ export default function TicketTable({ loggedInEmail }: { loggedInEmail: string }
           Authorization: `Bearer ${token}`,
         };
   
-        let response; // Declare response variable here
-  
+        let response;
+
         if (loggedInEmail && loggedInEmail.endsWith("@fourtc.com.br")) {
           response = await api.get('/gestaoatv', { headers });
         } else {
-          response = await api.get('/gestaoatv', { headers }); // Remove const keyword here
+          response = await api.get('/gestaoatv', { headers });
           const allData = response.data;
           const filteredData = loggedInEmail && loggedInEmail.endsWith("@fourtc.com.br") ?
             allData :
@@ -98,7 +106,6 @@ export default function TicketTable({ loggedInEmail }: { loggedInEmail: string }
   
         console.log("Dados recebidos da API:", response.data);
   
-        // Make sure response is defined before accessing its data
         if (response) {
           setTableData(response.data);
         }
@@ -108,12 +115,9 @@ export default function TicketTable({ loggedInEmail }: { loggedInEmail: string }
       }
     };
   
-    fetchTickets(); // Call the fetchTickets function
-  
-  }, [loggedInEmail]); // Add loggedInEmail as a dependency
-  
+    fetchTickets();
 
-
+  }, [loggedInEmail]); 
 
   const handleDeleteTransaction = async (id: number) => {
     try {
@@ -124,9 +128,7 @@ export default function TicketTable({ loggedInEmail }: { loggedInEmail: string }
         },
       };
   
-      await api.delete(`/gestaoatv/${id}`, headers); // Chama o endpoint para excluir a transação
-  
-      // Atualize os dados da tabela após a exclusão bem-sucedida
+      await api.delete(`/gestaoatv/${id}`, headers);
       
     } catch (error) {
       console.error('Erro ao excluir transação:', error);
@@ -134,41 +136,27 @@ export default function TicketTable({ loggedInEmail }: { loggedInEmail: string }
   };
 
   const formatarHora = (horas: number) => {
-    // Extrair as horas inteiras e os minutos da parte decimal
     const horasInteiras = Math.floor(horas);
     const minutos = Math.round((horas - horasInteiras) * 60);
-
-    // Formatar as horas e minutos com dois dígitos
     const horasFormatadas = String(horasInteiras).padStart(2, '0');
     const minutosFormatados = String(minutos).padStart(2, '0');
-
-    // Retornar a hora formatada no formato 'HH:MM'
     return `${horasFormatadas}:${minutosFormatados}`;
   };
 
-  
-
-
-  
-  
   function formatarReal(valor: number | null | undefined | string): string {
     if (valor == null || isNaN(Number(valor))) {
-      return ''; // Return an empty string if valor is null, undefined, or not a number
+      return '';
     }
   
-    // If valor is not a number, try parsing it
     if (typeof valor !== 'number') {
-      valor = parseFloat(valor); // Try parsing the valor as a number
+      valor = parseFloat(valor);
       if (isNaN(valor)) {
-        return ''; // Return an empty string if parsing fails
+        return '';
       }
     }
   
-    // Format the number as currency string
     return `R$${valor.toFixed(2).replace('.', ',')}`;
   }
-  
-   
 
   return (
     <DefaultLayout>

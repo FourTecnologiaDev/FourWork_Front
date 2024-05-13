@@ -220,7 +220,7 @@ export default function Cadastro({ }) {
           </div>
         )}
 
-        <TicketTable loggedInEmail={formData} />
+        
     </DefaultLayout>
   );
 }
