@@ -263,7 +263,7 @@ const mostrarProximoCodigoRAT = async () => {
   }, [ultimoCodigoRAT, setValue]);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout | undefined; // Definindo o tipo de 'timer'
+    let timer: ReturnType<typeof setTimeout> | undefined;
     if (redirect) {
       timer = setTimeout(() => {
         // Após 2 segundos, mude o valor de 'redirect' para 'false'
@@ -278,6 +278,9 @@ const mostrarProximoCodigoRAT = async () => {
 
 
 
+  const handleClick = () => {
+    setRedirect(true); // Altere o valor de 'redirect' para 'true' quando o botão for clicado
+  };
   
   return (
     <DefaultLayout>
@@ -430,7 +433,7 @@ const mostrarProximoCodigoRAT = async () => {
             <button
               type="submit"
               className="mt-30 flex w-30 font-bold items-center justify-center rounded-md bg-sky-700 py-2 pr-4 text-center font-medium text-white transition hover:bg-slate-700"
-              onClick={() => setRedirect(true)} // Altere o valor de 'redirect' para 'true' quando o botão for clicado
+              onClick={handleClick} // Altere o valor de 'redirect' para 'true' quando o botão for clicado
             >
               <span className="font-bold">Enviar</span>
             </button>
