@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
+import TicketTable from './pages/Table/Table';
 import Cadastro from './pages/Cadastro/Table';
 import RAT from './pages/RAT/table';
 import RatTable from './pages/RATS/table';
@@ -9,7 +10,7 @@ import Apontamento from './pages/cadastro2/Apontamento';
 
 function App() {
   const { pathname } = useLocation();
-  const [, setUserEmail] = useState<string>("");
+  const [userEmail, setUserEmail] = useState<string>("");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -82,7 +83,7 @@ function App() {
         element={
           <>
             <PageTitle title="Four Work - Gestão de atividades e faturamento" />
-           
+            <TicketTable loggedInEmail={userEmail} />
           </>
         }
       />
