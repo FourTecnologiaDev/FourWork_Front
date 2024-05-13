@@ -27,8 +27,8 @@ export default function Apontamento({}) {
   const [tipoPessoaSelecionado, setTipoPessoaSelecionado] = useState('');
   const [clienteSelecionado, setClienteSelecionado] = useState('');
   const [ultimoCodigoRAT, setUltimoCodigoRAT] = useState<string | null>(null);
-  const [showAlert, setShowAlert] = useState(false)
-  const [redirect, setRedirect] = useState(false);
+  const [showAlert] = useState(false)
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -260,24 +260,13 @@ const mostrarProximoCodigoRAT = async () => {
     }
   }, [ultimoCodigoRAT, setValue]);
 
-  useEffect(() => {
-    let timer: string | number | NodeJS.Timeout | undefined;
-    if (redirect) {
-      setShowAlert(true);
-      timer = setTimeout(() => {
-        // Após 2 segundos, mude o valor de 'redirect' para 'false'
-        setRedirect(false);
-      }, 1000);
-    }
 
-    return () => {
-      if (timer) clearTimeout(timer); // Limpar o timer quando o componente for desmontado
-    };
-  }, [redirect]);
 
 
   const handleClick = () => {
-    setRedirect(true); // Altere o valor de 'redirect' para 'true' quando o botão for clicado
+    setTimeout(() => {
+      <Link to="/Table/Table"></Link>
+    }, 2000);
   };
   
   return (
